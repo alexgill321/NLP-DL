@@ -69,4 +69,28 @@ def process_data(files, context_window, word2ix):
 
     return data
 
+def generate_contexts(data, context_window):
+    """ Generates the contexts for the data. Contexts are the words
+    to the left and right of the target word. 
+    Inputs
+    -----------
+    data: List[List[int]]. Each list corresponds to a file and the set of indices
+            for the contents of the file.
+    context_window: int. Size of the context window. Size is the amount
+            of words considered as context either to the left or right of a word
+
+    Output
+    ----------
+    contexts: List[List[int]]. Each list corresponds to a file and the set of indices
+            for the contexts of the file.
+    labels: List[int]. The target word for each context.
+    """
+    contexts = []
+    labels = []
+    for file in data:
+        for i in range(context_window, len(file)-context_window):
+            contexts.append(file[i-context_window: i] + file[i+1: i+context_window+1])
+            labels.append(file[i])
+    return contexts, labels
+
 

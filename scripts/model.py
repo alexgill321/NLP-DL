@@ -1,32 +1,25 @@
 import torch
 
-class MLP(torch.nn.Module):
-  def __init__(self, in_dim, hid_dim , out_dim):
-    """ This is the constructor. Initialize your network
-    layers here.
-    Inputs
-    --------
-    in_dim: int. Dimension of your input. It was 2 in the example
-    hid_dim: int. Dimension of the intermediate level. Also 2 in the example
-    out_dim: int. Dimension of your output. It was 1 in the example
-    """
-    super().__init__()        # Invoke the constructor of the parent class
-    self.w = torch.nn.Linear(in_dim, hid_dim)
-    self.y = torch.nn.ReLU()
-    self.w3 = torch.nn.Linear(hid_dim, out_dim)
-
-  def forward(self, inp):
-    """ Method for forward pass
-    Input
-    -------
-    inp: torch.Tensor. The dimension of the input (i.e, the last number in shape)
-        should match `in_dim`. The shape should be (n,in_dim) where n is the batch size
-
-    Output
-    ------
-    z: torch.Tensor. The result of the forward pass. The dimension of the output
-     (i.e, the last number in shape) should match `out_dim`. The shape should be
-     (n, out_dim) where n is the batch size.
-    """
-    z = self.w3(self.y(self.w(inp)))
-    return z
+class CBOW(torch.nn.Module):
+    def __init__(self, vocab_size, embedding_dim):
+        super(CBOW, self).__init__()
+        
+        # Projection layer: maps one-hot encoded vectors into embedding space
+        self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
+        
+        # Classifier layer: maps from the embedding space back to the vocabulary
+        self.fc = torch.nn.Linear(embedding_dim, vocab_size)
+        
+    def forward(self, context_indices):
+        # Context_indices shape: (batch_size, 2*context_window)
+        
+        # Project the context word indices into the embedding space
+        embeddings = self.embedding(context_indices)
+        
+        # Sum the embeddings along dimension 1 to get h0
+        h0 = torch.sum(embeddings, dim=1)
+        
+        # Pass h0 through the classifier layer
+        z = self.fc(h0)
+        
+        return z
