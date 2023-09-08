@@ -6,6 +6,11 @@ import torch
 from model import CBOW
 import numpy as np
 from model_utils import train_loop, evaluate
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--output_dir', type=str, help='Directory where model checkpoints will be saved')
+args = parser.parse_args()
 
 torch.manual_seed(69)
 #%%
@@ -49,9 +54,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 model = CBOW(len(vocab_dict), 100).to("cuda" if torch.cuda.is_available() else "cpu")
 
 #%%
-save_dir = os.getcwd()+"/../models"
-if not os.path.exists(save_dir):
-    os.makedirs(save_dir)
+save_dir = args.output_dir
 # %%
 lrs = [0.01, 0.001, .0001]
 eval_losses = []
