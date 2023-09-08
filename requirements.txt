@@ -1,0 +1,5 @@
+os
+numpy
+torch --index-url https://download.pytorch.org/whl/cu118
+tqdm
+gensim
