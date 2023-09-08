@@ -2,3 +2,4 @@
 .idea
 /test_files
 /scripts/__pycache__
+/models

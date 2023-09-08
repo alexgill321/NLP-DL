@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch
 from model import CBOW
 import numpy as np
-from model_utils import train_loop
+from model_utils import train_loop, evaluate
 
 torch.manual_seed(69)
 #%%
@@ -53,15 +53,18 @@ save_dir = os.getcwd()+"/../models"
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 # %%
-lrs = [.1, .01, 0.001, 0.0001]
+lrs = [0.01, 0.001, .0001]
 eval_losses = []
 for lr in lrs:
     print(f"Learning rate: {lr}")
     model = CBOW(len(vocab_dict), 100).to("cuda" if torch.cuda.is_available() else "cpu")
     train_loop(model, train_loader, lr = lr)
     
-    eval_losses.append(eval(model, test_loader))
+    eval_losses.append(evaluate(model, test_loader))
     torch.save(model.state_dict(), f"{save_dir}/cbow_lr_{lr}.pt")
     
 # %%
 print(eval_losses)
+# %%
+print(f"Best learning rate: {lrs[np.argmin(eval_losses)]}")
+# %%

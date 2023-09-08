@@ -36,7 +36,7 @@ def train_loop(model, train_loader, lr):
         print(f"Average training batch accuracy: {np.mean(train_acc)}")
 
 
-def eval(model, test_loader):
+def evaluate(model, test_loader):
     device = torch.device(f"cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
@@ -57,4 +57,5 @@ def eval(model, test_loader):
 
     print(f"Average test accuracy: {np.mean(test_acc)}")
     print(f"Average test loss: {np.mean(test_loss)}")
+    return np.mean(test_loss)
 
