@@ -14,9 +14,9 @@ args = parser.parse_args()
 
 torch.manual_seed(69)
 #%%
-vocab_path = os.getcwd()+"/../vocab.txt"
-train_path = os.getcwd()+"/../data/train"
-test_path = os.getcwd()+"/../data/dev"
+vocab_path = os.getcwd()+"/vocab.txt"
+train_path = os.getcwd()+"/data/train"
+test_path = os.getcwd()+"/data/dev"
 
 #%%
 vocab_dict = ut.get_word2ix(vocab_path)
