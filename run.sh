@@ -14,4 +14,4 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate nlp
 OUT_DIR=/scratch/general/vast/u1380656/cs6957/assignment1/models
 mkdir -p ${OUT_DIR}
-python main.py --output_dir ${OUT_DIR}
+python scripts/main.py --output_dir ${OUT_DIR}
