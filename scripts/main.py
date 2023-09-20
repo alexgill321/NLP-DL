@@ -56,7 +56,7 @@ model = CBOW(len(vocab_dict), 100).to("cuda" if torch.cuda.is_available() else "
 #%%
 save_dir = args.output_dir
 # %%
-lrs = [0.01, 0.001, .0001]
+lrs = [.01, .001, .0001]
 eval_losses = []
 for lr in lrs:
     print(f"Learning rate: {lr}")

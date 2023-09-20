@@ -12,7 +12,7 @@ vocab_dict = ut.get_word2ix(vocab_path)
 
 
 model = CBOW(len(vocab_dict), 100)
-model.load_state_dict(torch.load(os.getcwd()+"/../models/cbow_lr_0.001.pt"))
+model.load_state_dict(torch.load(os.getcwd()+"/../models/cbow_lr_0.0001.pt"))
 
 # Retrieve embeddings of every vocabulary word
 embeddings = model.embedding.weight.data
@@ -34,7 +34,7 @@ word_embedding_from_one_hot = torch.matmul(one_hot, W)
 print(word_embedding_from_one_hot)
 print(embeddings[index])
 # %%
-with open(os.getcwd() + '/../embeddings.txt', 'w') as f:
+with open(os.getcwd() + '/embeddings.txt', 'w') as f:
     f.write(f"{len(vocab_dict)} {100}\n")
     for key, value in vocab_dict.items():
         embedding = embeddings[value]
