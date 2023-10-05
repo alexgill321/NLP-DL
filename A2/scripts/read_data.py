@@ -2,8 +2,7 @@ from state import Token
 
 def parse_file(file_path):
     # Store the parsed data
-    x = []
-    y = []
+    data = []
     
     # Open and read the file line by line
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -20,17 +19,23 @@ def parse_file(file_path):
             if len(words) == len(pos):
                 # create tokens
                 tokens = [Token(idx, word, pos) for idx, (word, pos) in enumerate(zip(words, pos))]
-                x.append(tokens)
-                y.append(labels)
+                data.append((tokens, labels))
             else:
                 print("Mismatched lengths in line:", line)
                 break
     
-    return x, y
+    return data
 
 def get_tag_dict(file_path):
     tag_dict = {}
     with open(file_path, 'r') as file:
         for idx, tag in enumerate(file.readlines()):
             tag_dict[tag.strip()] = idx
+    return tag_dict
+
+def get_tag_dict_rev(file_path):
+    tag_dict = {}
+    with open(file_path, 'r') as file:
+        for idx, tag in enumerate(file.readlines()):
+            tag_dict[idx] = tag.strip()
     return tag_dict

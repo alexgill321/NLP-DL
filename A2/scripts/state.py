@@ -12,7 +12,6 @@ class DependencyEdge:
         self.source = source  # Source token index
         self.target = target  # target token index
         self.label  = label  # dependency label
-        pass
 
 
 class ParseState:
@@ -31,13 +30,15 @@ class ParseState:
         )
 
 
-def shift(state: ParseState) -> None:
+def shift(state: ParseState, c=2) -> None:
+    if len(state.parse_buffer) == c:
+        pass
+    else:
+        next = state.parse_buffer.pop(0)
+        state.stack.append(next)
 
-    next = state.parse_buffer.pop()
-    state.stack.append(next)
 
-
-def left_arc(state: ParseState, label: str) -> None:
+def left_arc(state: ParseState, label: str, c=2) -> None:
     # TODO: Implement this as an in-place operation that updates the parse state and does not return anything
 
     # The python documentation has some pointers on how lists can be used as stacks and queues. This may come useful:
@@ -51,7 +52,7 @@ def left_arc(state: ParseState, label: str) -> None:
     state.stack.append(top)
 
 
-def right_arc(state: ParseState, label: str) -> None:
+def right_arc(state: ParseState, label: str, c=2) -> None:
     # TODO: Implement this as an in-place operation that updates the parse state and does not return anything
 
     # The python documentation has some pointers on how lists can be used as stacks and queues. This may come useful:
@@ -63,14 +64,34 @@ def right_arc(state: ParseState, label: str) -> None:
     top2 = state.stack.pop()
     state.add_dependency(top2, top, label)
     state.stack.append(top2)
-
+    
+def is_legal(action: str, state: ParseState, c=2) -> bool:
+    if action == "SHIFT":
+        if len(state.parse_buffer) == c:
+            return False
+        else:
+            return True
+    elif action.startswith("REDUCE_L"):
+        if len(state.stack) <= c+1:
+            return False
+        else:
+            return True
+    elif action.startswith("REDUCE_R"):
+        if len(state.stack) <= c+1:
+            return False
+        else:
+            return True
+    else:
+        return False
 
 
 def is_final_state(state: ParseState, cwindow: int) -> bool:
-    if len(state.parse_buffer) == 0 and len(state.stack) == cwindow - 1:
+    if len(state.parse_buffer) == cwindow and len(state.stack) == cwindow + 1:
         return True
+    else:
+        return False
 
-def generate_from_data(token_list, label_list, label_tags, c=2):
+def generate_from_data(data, label_tags, pos_tags, c=2):
     """
     Generate training data for dependency parsing model.
     
@@ -78,34 +99,60 @@ def generate_from_data(token_list, label_list, label_tags, c=2):
     :param c: Number of elements to consider from the top of stack and start of buffer.
     :return: List of tuples containing input features (w, p) and output label.
     """
-    data = []
+    words = []
+    pos = []
+    y = []
 
-    for tokens, labels in zip(token_list, label_list):
+    for tokens, labels in data:
         # Initialize parse state
-        stack = []
+        stack = [Token(idx=-i-1, word="[PAD]", pos="NULL") for i in range(c)]
         parse_buffer = tokens.copy()
+        ix = len(parse_buffer)
+        parse_buffer.extend([Token(idx=ix+i+1, word="[PAD]", pos="NULL") for i in range(c)])
         dependencies = []
         state = ParseState(stack, parse_buffer, dependencies)
 
         # Apply actions according to labels and generate training data
         for label in labels:
             # Extract top c elements from stack and buffer and their corresponding POS tags
-            w = [t.word for t in stack[-c:]] + [t.word for t in parse_buffer[:c]]
-            p = [t.pos for t in stack[-c:]] + [t.pos for t in parse_buffer[:c]]
+            w_stack = [t.word for t in state.stack[-c:]]
+            w_stack.reverse()
+            p_stack = [t.pos for t in state.stack[-c:]]
+            p_stack.reverse()
+            w_buff = [t.word for t in state.parse_buffer[:c]]
+            p_buff = [t.pos for t in state.parse_buffer[:c]]
             
-            # Pad w and p if necessary
-            w = (['[PAD]'] * (2*c - len(w))) + w
-            p = (['NULL'] * (2*c - len(p))) + p
+            w = w_stack + w_buff
+            
+            p = p_stack + p_buff            
             
             label_val = label_tags[label]
-            data.append((w, p, label_val))
+            pos_val = [pos_tags[p[i]] for i in range(len(p))]
+            words.append(w)
+            pos.append(pos_val)
+            y.append(label_val)
             
             # Apply action to parse state
             if label == "SHIFT":
                 shift(state)
             elif label.startswith("REDUCE_L"):
-                left_arc(state, label.split("_")[1])  # Extracting dependency type from label
+                left_arc(state, label)  # Extracting dependency type from label
             elif label.startswith("REDUCE_R"):
-                right_arc(state, label.split("_")[1])  # Extracting dependency type from label
+                right_arc(state, label)  # Extracting dependency type from label
 
-    return data
+    return words, pos, y
+
+def generate_from_data_raw(data, c=2):
+    """
+    Generate training data for dependency parsing model.
+    
+    :param parsed_data: Parsed data containing words, POS tags, and labels.
+    :param c: Number of elements to consider from the top of stack and start of buffer.
+    :return: List of tuples containing input features (w, p) and output label.
+    """
+    sentences = []
+    raw_labels = []
+    for tokens, labels in data:
+        sentences.append([token.word for token in tokens])
+        raw_labels.append([label for label in labels])
+    return sentences, raw_labels

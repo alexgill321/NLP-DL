@@ -9,7 +9,7 @@ def train_loop(model, train_loader, lr):
     max_epochs = 10
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    loss_fn = torch.nn.CrossEntropyLoss()
+    loss_fn = torch.nn.NLLLoss()
 
     for ep in range(1, max_epochs+1):
         print(f"Epoch {ep}")
@@ -32,6 +32,8 @@ def train_loop(model, train_loader, lr):
             train_loss.append(loss.item())
             train_acc.append(acc.item())
         
+        # Evaluate on dev set
+
         print(f"Average training batch loss: {np.mean(train_loss)}")
         print(f"Average training batch accuracy: {np.mean(train_acc)}")
 
