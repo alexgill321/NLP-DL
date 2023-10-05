@@ -2,10 +2,11 @@ from typing import List, Set
 import os
 
 class Token:
-    def __init__(self, idx: int, word: str, pos: str):
+    def __init__(self, idx: int, word: str, pos: str, emb: List[float] = None):
         self.idx = idx # Unique index of the token
         self.word = word # Token string
         self.pos  = pos # Part of speech tag 
+        self.emb  = emb # Embedding of the word (if available)
 
 class DependencyEdge:
     def __init__(self, source: Token, target: Token, label:str):
