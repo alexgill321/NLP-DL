@@ -93,16 +93,6 @@ def is_final_state(state: ParseState, cwindow: int) -> bool:
         return False
     
 def find_children(state:ParseState, cwindow: int) -> tuple:
-    """
-    Find the leftmost and rightmost child of a given token.
-
-    Parameters:
-    - token: The token for which to find the children.
-    - dependencies: The list of DependencyEdge objects that define the dependencies between tokens.
-
-    Returns:
-    - A tuple (leftmost_child, rightmost_child), where each element is a Token object or None if no such child exists.
-    """
     children = []
     labels = []
     for source in state.stack[-cwindow:]:
@@ -110,11 +100,8 @@ def find_children(state:ParseState, cwindow: int) -> tuple:
         rightmost_child = None
         for dep in state.dependencies:
             if dep.source == source:
-                # Checking for leftmost child
                 if leftmost_child is None or dep.target.idx < leftmost_child.target.idx:
                     leftmost_child = dep
-                
-                # Checking for rightmost child
                 if rightmost_child is None or dep.target.idx > rightmost_child.target.idx:
                     rightmost_child = dep
         if leftmost_child is None:
@@ -136,19 +123,11 @@ def find_children(state:ParseState, cwindow: int) -> tuple:
     return children, labels
 
 def generate_from_data(data, label_tags, pos_tags, c=2):
-    """
-    Generate training data for dependency parsing model.
-    
-    :param parsed_data: Parsed data containing words, POS tags, and labels.
-    :param c: Number of elements to consider from the top of stack and start of buffer.
-    :return: List of tuples containing input features (w, p) and output label.
-    """
     words = []
     pos = []
     y = []
 
     for tokens, labels in data:
-        # Initialize parse state
         stack = [Token(idx=-i-1, word="[PAD]", pos="NULL") for i in range(c)]
         parse_buffer = tokens.copy()
         ix = len(parse_buffer)
@@ -156,9 +135,7 @@ def generate_from_data(data, label_tags, pos_tags, c=2):
         dependencies = []
         state = ParseState(stack, parse_buffer, dependencies)
 
-        # Apply actions according to labels and generate training data
         for label in labels:
-            # Extract top c elements from stack and buffer and their corresponding POS tags
             w_stack = [t.word for t in state.stack[-c:]]
             w_stack.reverse()
             p_stack = [t.pos for t in state.stack[-c:]]
@@ -176,31 +153,22 @@ def generate_from_data(data, label_tags, pos_tags, c=2):
             pos.append(pos_val)
             y.append(label_val)
             
-            # Apply action to parse state
             if label == "SHIFT":
                 shift(state)
             elif label.startswith("REDUCE_L"):
-                left_arc(state, label)  # Extracting dependency type from label
+                left_arc(state, label) 
             elif label.startswith("REDUCE_R"):
-                right_arc(state, label)  # Extracting dependency type from label
+                right_arc(state, label)
 
     return words, pos, y
 
 def generate_from_data_with_dep(data, label_tags, pos_tags, c=2):
-    """
-    Generate training data for dependency parsing model.
-    
-    :param parsed_data: Parsed data containing words, POS tags, and labels.
-    :param c: Number of elements to consider from the top of stack and start of buffer.
-    :return: List of tuples containing input features (w, p) and output label.
-    """
     words = []
     pos = []
     y = []
     dep = []
 
     for tokens, labels in data:
-        # Initialize parse state
         stack = [Token(idx=-i-1, word="[PAD]", pos="NULL") for i in range(c)]
         parse_buffer = tokens.copy()
         ix = len(parse_buffer)
@@ -208,9 +176,7 @@ def generate_from_data_with_dep(data, label_tags, pos_tags, c=2):
         dependencies = []
         state = ParseState(stack, parse_buffer, dependencies)
 
-        # Apply actions according to labels and generate training data
         for label in labels:
-            # Extract top c elements from stack and buffer and their corresponding POS tags
             w_stack = [t.word for t in state.stack[-c:]]
             w_stack.reverse()
             p_stack = [t.pos for t in state.stack[-c:]]
@@ -234,12 +200,11 @@ def generate_from_data_with_dep(data, label_tags, pos_tags, c=2):
             dep.append(l_val)
             y.append(label_val)
             
-            # Apply action to parse state
             if label == "SHIFT":
                 shift(state)
             elif label.startswith("REDUCE_L"):
-                left_arc(state, label)  # Extracting dependency type from label
+                left_arc(state, label)  
             elif label.startswith("REDUCE_R"):
-                right_arc(state, label)  # Extracting dependency type from label
+                right_arc(state, label)
 
     return words, pos, dep, y

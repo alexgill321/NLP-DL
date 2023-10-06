@@ -224,3 +224,62 @@ def train_loop_dep(model, train_loader, dev_data, lr, c=2, emb=('840B', 300), sa
         print(f"Dev set UAS: {uas}")
         print(f"Dev set LAS: {las}")
     return uas_list, las_list
+
+def test(model, test_data, emb=('840B', 300), c=2):
+    model.eval()
+    device = torch.device('cpu')
+    model.to(device)
+    sentences = []
+    pred_actions = []
+    pred_dependencies = []
+    w_emb = torchtext.vocab.GloVe(name=emb[0], dim=emb[1])
+    d_emb = emb[1]
+    pos_tags = get_tag_dict(os.getcwd() + "/A2/data/pos_set.txt")
+    tags_to_labels = get_tag_dict_rev(os.getcwd() + "/A2/data/tagset.txt")
+
+    for tokens in tqdm(test_data):
+        stack = [Token(idx=-i-1, word="[NULL]", pos="NULL") for i in range(c)]
+        parse_buffer = tokens.copy()
+        ix = len(parse_buffer)
+        parse_buffer.extend([Token(idx=ix+i+1, word="[NULL]", pos="NULL") for i in range(c)])
+        dependencies = []
+        state = ParseState(stack, parse_buffer, dependencies)
+
+        sentences.append([token.word for token in tokens])
+        action_list = []
+        while not is_final_state(state, c):
+            w_stack = [t.word for t in state.stack[-c:]]
+            w_stack.reverse()
+            p_stack = [t.pos for t in state.stack[-c:]]
+            p_stack.reverse()
+            w_buff = [t.word for t in state.parse_buffer[:c]]
+            p_buff = [t.pos for t in state.parse_buffer[:c]]
+
+            w = w_stack + w_buff
+            p = p_stack + p_buff
+            w_list = [w for w in w]
+            w = w_emb.get_vecs_by_tokens(w_list, lower_case_backup=True)
+            w = w.view(1, 2*c, d_emb)
+            w = w.to(device)
+            p = [[pos_tags[pos] for pos in p]]
+            p = torch.tensor(p).to(device)
+            out = model(w, p)
+            pred_index = torch.argmax(out, dim=1)
+            pred_a = tags_to_labels[pred_index.item()]
+
+            while not is_legal(pred_a, state, c):
+                out[0][pred_index] = -100
+                pred_index = torch.argmax(out, dim=1)
+                pred_a = tags_to_labels[pred_index.item()]
+
+            if pred_a == "SHIFT":
+                shift(state)
+            elif pred_a.startswith("REDUCE_L"):
+                left_arc(state, pred_a)
+            else:
+                right_arc(state, pred_a)
+            action_list.append(pred_a)
+        pred_actions.append(action_list)
+        pred_dependencies.append(state.dependencies.copy())
+    return pred_actions, pred_dependencies
+

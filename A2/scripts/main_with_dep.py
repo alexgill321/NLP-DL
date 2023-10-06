@@ -17,7 +17,7 @@ pos_tags = get_tag_dict(os.getcwd() + "/A2/data/pos_set.txt")
 
 train_w, train_p, train_dep, train_y = generate_from_data_with_dep(train_data, label_tags, pos_tags)
 
-w_emb = torchtext.vocab.GloVe(name='6B', dim=300)
+w_emb = torchtext.vocab.GloVe(name='840B', dim=300)
 
 class TokenDataset(Dataset):
     def __init__(self, w, p, dep, y):
@@ -36,6 +36,6 @@ train_dataset = TokenDataset(train_w, train_p, train_dep, train_y)
 
 train_loader = DataLoader(train_dataset, batch_size=512, shuffle=True)
 
-model = ParserDep(d_emb=300).to("cuda" if torch.cuda.is_available() else "cpu")
+model = ParserDep(d_emb=300, mean=False).to("cuda" if torch.cuda.is_available() else "cpu")
 
-train_loop_dep(model, train_loader, dev_data, lr=0.001, emb = ('6B', 300), save_dir=os.getcwd() + "/A2/models/dep/")
+train_loop_dep(model, train_loader, dev_data, lr=0.01, emb = ('840B', 300), save_dir=os.getcwd() + "/A2/models/dep/")
