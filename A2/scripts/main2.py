@@ -1,34 +1,41 @@
-from read_data import parse_file
+from read_data import parse_file, get_tag_dict
 from torch.utils.data import Dataset, DataLoader
+from state import generate_from_data_with_dep
 import torch
 import os
-from model import Parser
-from model_utilsv2 import train_loop
+from model import ParserDep
+from model_utils import train_loop_dep
+import torchtext
 
 
 train_data = parse_file(os.getcwd() + "/A2/data/train.txt")
 dev_data = parse_file(os.getcwd() + "/A2/data/dev.txt")
 test_data = parse_file(os.getcwd() + "/A2/data/test.txt")
+label_tags = get_tag_dict(os.getcwd() + "/A2/data/tagset.txt")
+pos_tags = get_tag_dict(os.getcwd() + "/A2/data/pos_set.txt")
+
+
+train_w, train_p, train_dep, train_y = generate_from_data_with_dep(train_data, label_tags, pos_tags)
+
+w_emb = torchtext.vocab.GloVe(name='6B', dim=300)
 
 class TokenDataset(Dataset):
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, w, p, dep, y):
+        self.x = [w_emb.get_vecs_by_tokens(w, lower_case_backup=True) for w in w]
+        self.p = torch.tensor(p)
+        self.l = torch.tensor(dep)
+        self.y = torch.tensor(y)
 
     def __len__(self):
-        return len(self.data)
+        return len(self.x)
 
     def __getitem__(self, idx):
-        return self.data[idx]
+        return self.x[idx], self.p[idx], self.l[idx], self.y[idx]
     
-train_dataset = TokenDataset(train_data)
-dev_dataset = TokenDataset(dev_data)
-test_dataset = TokenDataset(test_data)
+train_dataset = TokenDataset(train_w, train_p, train_dep, train_y)
 
-batch_size = 1
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-dev_loader = DataLoader(dev_dataset, batch_size=1, shuffle=False)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=512, shuffle=True)
 
-model = Parser(d_emb=300).to("cuda" if torch.cuda.is_available() else "cpu")
+model = ParserDep(d_emb=300).to("cuda" if torch.cuda.is_available() else "cpu")
 
-train_loop(model, train_data, dev_loader, 0.001)
+train_loop_dep(model, train_loader, dev_data, lr=0.001, emb = ('6B', 300), save_dir=os.getcwd() + "/A2/models/dep/")

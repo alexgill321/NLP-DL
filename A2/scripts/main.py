@@ -1,6 +1,6 @@
 from read_data import parse_file, emb_parse, get_tag_dict, get_tag_dict_rev
 import os
-from state import generate_from_data, generate_from_data_raw
+from state import generate_from_data
 from torch.utils.data import Dataset, DataLoader
 import torch
 from model import Parser
@@ -32,25 +32,20 @@ class DependencyDataset(Dataset):
 
 batch_size = 512
 
-#emb_list = [('6B', 50),('6B', 300), ('42B', 300), ('840B', 300)]
-emb_list = [('6B', 50)]
-mean = [False]
+emb_list = [('6B', 50),('6B', 300), ('42B', 300), ('840B', 300)]
+mean = [False, True]
 
 res = []
 for m in mean:
-    emb_res = []
     for emb in emb_list:
         w_emb = torchtext.vocab.GloVe(name=emb[0], dim=emb[1])
         train_dataset = DependencyDataset(train_w, train_p, train_y)
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
         model = Parser(d_emb=emb[1], mean=m).to("cuda" if torch.cuda.is_available() else "cpu")
-        lr_res = []
-        for lr in [0.01]:
+        for lr in [0.01, 0.001, 0.0001]:
             uas,las = train_loop(model, train_loader, dev_data, lr, emb=emb, save_dir=os.getcwd() + "/A2/models/")
-            lr_res.append((lr, uas, las))
-        print(f"Mean: {m}, Embedding: {emb}, Results: {lr_res}")
-        emb_res.append((emb, lr_res))
-    res.append((m, emb_res))
+            params = "Model: Mean: " + str(m) + " Embedding: " + str(emb) + " LR: " + str(lr)
+            res.append((params, uas, las))
 
-with open('A2/models/results.json', 'w') as file:
-    json.dump(res, file)
+            with open('A2/models/results.json', 'w') as file:
+                json.dump(res, file)

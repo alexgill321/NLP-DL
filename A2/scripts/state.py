@@ -91,6 +91,49 @@ def is_final_state(state: ParseState, cwindow: int) -> bool:
         return True
     else:
         return False
+    
+def find_children(state:ParseState, cwindow: int) -> tuple:
+    """
+    Find the leftmost and rightmost child of a given token.
+
+    Parameters:
+    - token: The token for which to find the children.
+    - dependencies: The list of DependencyEdge objects that define the dependencies between tokens.
+
+    Returns:
+    - A tuple (leftmost_child, rightmost_child), where each element is a Token object or None if no such child exists.
+    """
+    children = []
+    labels = []
+    for source in state.stack[-cwindow:]:
+        leftmost_child = None
+        rightmost_child = None
+        for dep in state.dependencies:
+            if dep.source == source:
+                # Checking for leftmost child
+                if leftmost_child is None or dep.target.idx < leftmost_child.target.idx:
+                    leftmost_child = dep
+                
+                # Checking for rightmost child
+                if rightmost_child is None or dep.target.idx > rightmost_child.target.idx:
+                    rightmost_child = dep
+        if leftmost_child is None:
+            children.append('[PAD]')
+        else:
+            children.append(leftmost_child.target.word)
+        if rightmost_child is None:
+            children.append('[PAD]')
+        else:
+            children.append(rightmost_child.target.word)
+        if leftmost_child is None:
+            labels.append('NULL')
+        else:
+            labels.append(leftmost_child.label)
+        if rightmost_child is None:
+            labels.append('NULL')
+        else:
+            labels.append(rightmost_child.label)
+    return children, labels
 
 def generate_from_data(data, label_tags, pos_tags, c=2):
     """
@@ -143,7 +186,7 @@ def generate_from_data(data, label_tags, pos_tags, c=2):
 
     return words, pos, y
 
-def generate_from_data_raw(data, c=2):
+def generate_from_data_with_dep(data, label_tags, pos_tags, c=2):
     """
     Generate training data for dependency parsing model.
     
@@ -151,9 +194,52 @@ def generate_from_data_raw(data, c=2):
     :param c: Number of elements to consider from the top of stack and start of buffer.
     :return: List of tuples containing input features (w, p) and output label.
     """
-    sentences = []
-    raw_labels = []
+    words = []
+    pos = []
+    y = []
+    dep = []
+
     for tokens, labels in data:
-        sentences.append([token.word for token in tokens])
-        raw_labels.append([label for label in labels])
-    return sentences, raw_labels
+        # Initialize parse state
+        stack = [Token(idx=-i-1, word="[PAD]", pos="NULL") for i in range(c)]
+        parse_buffer = tokens.copy()
+        ix = len(parse_buffer)
+        parse_buffer.extend([Token(idx=ix+i+1, word="[PAD]", pos="NULL") for i in range(c)])
+        dependencies = []
+        state = ParseState(stack, parse_buffer, dependencies)
+
+        # Apply actions according to labels and generate training data
+        for label in labels:
+            # Extract top c elements from stack and buffer and their corresponding POS tags
+            w_stack = [t.word for t in state.stack[-c:]]
+            w_stack.reverse()
+            p_stack = [t.pos for t in state.stack[-c:]]
+            p_stack.reverse()
+            w_buff = [t.word for t in state.parse_buffer[:c]]
+            p_buff = [t.pos for t in state.parse_buffer[:c]]
+
+            w_dep, dep_lab = find_children(state, c)
+            
+            w = w_stack + w_buff + w_dep
+            
+            p = p_stack + p_buff
+
+            l = dep_lab            
+            
+            label_val = label_tags[label]
+            l_val = [label_tags[l] for l in l]
+            pos_val = [pos_tags[p[i]] for i in range(len(p))]
+            words.append(w)
+            pos.append(pos_val)
+            dep.append(l_val)
+            y.append(label_val)
+            
+            # Apply action to parse state
+            if label == "SHIFT":
+                shift(state)
+            elif label.startswith("REDUCE_L"):
+                left_arc(state, label)  # Extracting dependency type from label
+            elif label.startswith("REDUCE_R"):
+                right_arc(state, label)  # Extracting dependency type from label
+
+    return words, pos, dep, y
