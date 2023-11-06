@@ -26,6 +26,7 @@ def train_loop(model, train_loader, dev_loader, loss_weights, epochs=5, lr=0.000
                 model.train()
                 optimizer.zero_grad()
                 x, y = batch
+                tochar(x)
                 x = torch.tensor(x).to(device)
                 y = torch.tensor(y, dtype=torch.long).to(device)
                 emb_x = model.embedding(x)
@@ -56,11 +57,21 @@ def train_loop(model, train_loader, dev_loader, loss_weights, epochs=5, lr=0.000
         print("Dev Loss: ", np.mean(dev_losses))
         print("Dev Perplexity: ", 2**np.mean(dev_losses))
 
+def tochar(x):
+    for i in range(len(x)):
+        x_char = []
+        for j in range(len(x[i])):
+            x_char.append(inv_vocab[x[i][j]])
+        print(x_char)
+
 train_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/train.pt')
 dev_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/dev.pt')
 
 with open(os.getcwd() + '/A3/data/vocab.pkl', 'rb') as f:
     vocab = pickle.load(f)
+
+inv_vocab = {v: k for k, v in vocab.items()}
+
 raw_train_data = ut.convert_files2idx(ut.get_files(os.getcwd() + '/A3/data/train'), vocab)
 
 train_loader = DataLoader(train_dataset, batch_size=128, shuffle=False)
