@@ -10,12 +10,10 @@ class charLSTM(nn.Module):
         self.fc1 = nn.Linear(200, 300)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(300, 386)
-        self.softmax = nn.Softmax(dim=2)
         
 
     def forward(self, x):
         x, _ = self.lstm(x)
         x = self.relu(self.fc1(x))
         x = self.fc2(x)
-        x = self.softmax(x)
         return x

@@ -74,16 +74,13 @@ def convert_files2idx(files, vocab):
 class characterDataset(Dataset):
     def __init__(self, data: List[tuple]):
         print("Initializing Dataset")
-        self.x = []
-        self.y = []
-        for line in tqdm.tqdm(data):
-            self.x.append(line[0])
-            self.y.append(line[1])
+        self.data = data
 
     def __len__(self):
-        return len(self.x)
+        return len(self.data)
 
     def __getitem__(self, idx):
-        x = self.x[idx]
-        y = self.y[idx]
+        x, y = self.data[idx]
+        x = torch.tensor(x)  # Convert input data to a PyTorch tensor
+        y = torch.tensor(y)  # Convert labels to a PyTorch tensor
         return x, y

@@ -18,19 +18,12 @@ def preprocess(data: List[List[int]], vocab: dict, k: int = 500):
     """
 
     out_data = []
-
-    rev_vocab = {v: k for k, v in vocab.items()}
+    
     for row in tqdm.tqdm(data):
         while len(row) % k != 0:
             row.append(vocab['[PAD]'])
         
-        inputs = np.array_split(row, len(row)/k)
-
-        rev_inputs = []
-        for input in inputs:
-            for i in range(len(input)):
-                rev_inputs.append(rev_vocab[input[i]])
-        
+        inputs = np.array_split(row, len(row)/k)     
 
         inputs = [input.tolist() for input in inputs]
         

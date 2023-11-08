@@ -26,14 +26,13 @@ def train_loop(model, train_loader, dev_loader, loss_weights, epochs=5, lr=0.000
                 model.train()
                 optimizer.zero_grad()
                 x, y = batch
-                tochar(x)
-                x = torch.tensor(x).to(device)
-                y = torch.tensor(y, dtype=torch.long).to(device)
+                x = x.to(device)
+                y = y.to(device)
+                y = y.type(torch.long)
                 emb_x = model.embedding(x)
                 emb_x = emb_x.clone().detach().requires_grad_(True)
                 out = model(emb_x).to(device)
-                out = torch.transpose(out, 1, 2)
-                loss = loss_fn(out, y)
+                loss = loss_fn(out.view(-1,386), y.view(-1))
                 loss.backward()
                 optimizer.step()
                 pbar.set_description("Loss: %f" % (loss.item()))
@@ -58,36 +57,46 @@ def train_loop(model, train_loader, dev_loader, loss_weights, epochs=5, lr=0.000
         print("Dev Perplexity: ", 2**np.mean(dev_losses))
 
 def tochar(x):
+    x = x.numpy()
     for i in range(len(x)):
         x_char = []
         for j in range(len(x[i])):
             x_char.append(inv_vocab[x[i][j]])
         print(x_char)
 
-train_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/train.pt')
-dev_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/dev.pt')
+def main():
+    train_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/train.pt')
 
-with open(os.getcwd() + '/A3/data/vocab.pkl', 'rb') as f:
-    vocab = pickle.load(f)
+    dev_dataset = torch.load(os.getcwd() + '/A3/data/preprocessed/dev.pt')
 
-inv_vocab = {v: k for k, v in vocab.items()}
+    with open(os.getcwd() + '/A3/data/vocab.pkl', 'rb') as f:
+        vocab = pickle.load(f)
 
-raw_train_data = ut.convert_files2idx(ut.get_files(os.getcwd() + '/A3/data/train'), vocab)
+    inv_vocab = {v: k for k, v in vocab.items()}
 
-train_loader = DataLoader(train_dataset, batch_size=128, shuffle=False)
-dev_loader = DataLoader(dev_dataset, batch_size=128, shuffle=False)
+    raw_train_data = ut.convert_files2idx(ut.get_files(os.getcwd() + '/A3/data/train'), vocab)
 
-model = charLSTM(emb_dim=386, n_layers=2)
+    train_loader = DataLoader(train_dataset, batch_size=128, shuffle=False)
 
-counts = get_counts(raw_train_data, vocab)
+    dev_loader = DataLoader(dev_dataset, batch_size=128, shuffle=False)
 
-sum = 0
-for count in counts.values():
-    sum += count
+    counts = get_counts(raw_train_data, vocab)
 
-loss_weights = []
-for i in range(len(vocab)):
-    loss_weights.append(1- counts[i]/sum)
+    sum = 0
+    for count in counts.values():
+        sum += count
 
-train_loop(model, train_loader=train_loader, dev_loader=dev_loader,
-            loss_weights=torch.tensor(loss_weights, dtype=torch.float32))
+    loss_weights = []
+    for i in range(len(vocab)):
+        loss_weights.append(1- counts[i]/sum)
+
+    for n_layers in range(1,2):
+        for lr in [0.0001, 0.00001, 0.000001]:
+            print("Training Model with Learning Rate: ", lr, " and Number of Layers: ", n_layers)
+            model = charLSTM(emb_dim=386, n_layers=n_layers)
+
+            train_loop(model, train_loader=train_loader, dev_loader=dev_loader,
+                        loss_weights=torch.tensor(loss_weights, dtype=torch.float32), lr = lr)
+        
+if __name__ == "__main__":
+    main()
