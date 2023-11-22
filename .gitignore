@@ -7,3 +7,7 @@
 /A3/scripts/__pycache__
 A2/scripts/a2.zip
 A3/data
+*.env
+*.pyc
+A4/models
+*.vscode
