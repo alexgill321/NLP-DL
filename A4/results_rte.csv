@@ -1,0 +1,103 @@
+text1,text2,preds,prob_0,prob_1
+This church choir sings to the masses as they sing joyous songs from the book at a church.,The church is filled with song.,1,0.48674452,0.51325554
+This church choir sings to the masses as they sing joyous songs from the book at a church.,A choir singing at a baseball game.,1,0.2832802,0.7167198
+"A woman with a green headscarf, blue shirt and a very big grin.",The woman is very happy.,1,0.34640944,0.6535905
+"A woman with a green headscarf, blue shirt and a very big grin.",The woman has been shot.,1,0.2635391,0.7364609
+An old man with a package poses in front of an advertisement.,A man poses in front of an ad.,0,0.5710764,0.4289236
+An old man with a package poses in front of an advertisement.,A man walks by an ad.,1,0.31519607,0.68480396
+A statue at a museum that no seems to be looking at.,There is a statue that not many people seem to be interested in.,1,0.48520786,0.51479214
+A statue at a museum that no seems to be looking at.,Tons of people are gathered around the statue.,1,0.27412027,0.7258797
+A land rover is being driven across a river.,A Land Rover is splashing water as it crosses a river.,0,0.66317797,0.336822
+A land rover is being driven across a river.,A vehicle is crossing a river.,1,0.4145965,0.5854035
+A land rover is being driven across a river.,A sedan is stuck in the middle of a river.,1,0.29712585,0.7028741
+A man playing an electric guitar on stage.,A man playing banjo on the floor.,1,0.494651,0.505349
+A man playing an electric guitar on stage.,A man playing guitar on stage.,0,0.63193154,0.36806843
+A blond-haired doctor and her African american assistant looking threw new medical manuals.,A doctor is looking at a book,1,0.28017917,0.71982086
+A blond-haired doctor and her African american assistant looking threw new medical manuals.,A man is eating pb and j,1,0.23934631,0.76065373
+"One tan girl with a wool hat is running and leaning over an object, while another person in a wool hat is sitting on the ground.",A boy runs into a wall,1,0.3205454,0.6794546
+"One tan girl with a wool hat is running and leaning over an object, while another person in a wool hat is sitting on the ground.",A tan girl runs leans over an object,0,0.67494076,0.32505926
+A young family enjoys feeling ocean waves lap at their feet.,A family is out at a restaurant.,1,0.31030792,0.6896921
+A young family enjoys feeling ocean waves lap at their feet.,A family is at the beach.,1,0.42712614,0.5728739
+A couple walk hand in hand down a street.,A couple is walking together.,1,0.42582622,0.5741738
+A couple walk hand in hand down a street.,A couple is sitting on a bench.,1,0.3127609,0.6872391
+3 young man in hoods standing in the middle of a quiet street facing the camera.,Three people sit by a busy street bareheaded.,1,0.23086128,0.7691387
+3 young man in hoods standing in the middle of a quiet street facing the camera.,Three hood wearing people pose for a picture.,1,0.4505142,0.5494858
+3 young man in hoods standing in the middle of a quiet street facing the camera.,Three hood wearing people stand in a street.,0,0.52411664,0.47588336
+A man reads the paper in a bar with green lighting.,The man is inside.,1,0.25326517,0.7467348
+A man reads the paper in a bar with green lighting.,The man is climbing a mountain.,1,0.2450465,0.75495344
+Three firefighter come out of subway station.,Three firefighters coming up from a subway station.,0,0.5563473,0.4436527
+Three firefighter come out of subway station.,Three firefighters playing cards inside a fire station.,1,0.38728827,0.6127117
+"A person wearing a straw hat, standing outside working a steel apparatus with a pile of coconuts on the ground.",A person is near a pile of coconuts.,0,0.6559048,0.34409517
+"A person wearing a straw hat, standing outside working a steel apparatus with a pile of coconuts on the ground.",A person is burning a straw hat.,0,0.65135854,0.34864146
+Male in a blue jacket decides to lay in the grass.,The guy in yellow is rolling on the grass,1,0.40088812,0.59911186
+Male in a blue jacket decides to lay in the grass.,The guy wearing a blue jacket is laying on the green grass,0,0.5452722,0.45472786
+During calf roping a cowboy calls off his horse.,A man ropes a calf successfully.,1,0.32483467,0.67516536
+A little boy in a gray and white striped sweater and tan pants is playing on a piece of playground equipment.,A boy is on a playground.,0,0.6898847,0.31011528
+A little boy in a gray and white striped sweater and tan pants is playing on a piece of playground equipment.,The boy is sitting on the school bus on his way home.,1,0.29738104,0.7026189
+A woman wearing a ball cap squats down to touch the cracked earth.,A squatting woman wearing a hat touching the ground.,1,0.49676967,0.5032303
+A woman wearing a ball cap squats down to touch the cracked earth.,A woman wearing a sun bonnet planting a garden.,1,0.30025342,0.69974655
+Two children re laying on a rug with some wooden bricks laid out in a square between them.,Two children are playing catch at a park.,1,0.24740277,0.7525972
+Two children re laying on a rug with some wooden bricks laid out in a square between them.,Two children are on a rug.,0,0.66448325,0.33551678
+A man standing in front of a building on the phone as two men to the side pain on the side.,a guy near a building stands by two other men,1,0.4054248,0.59457517
+A man standing in front of a building on the phone as two men to the side pain on the side.,two girls walk through a hall,1,0.23745279,0.7625472
+"The two young girls are dressed as fairies, and are playing in the leaves outdoors.",Girls are playing outdoors.,0,0.62433964,0.37566036
+"The two young girls are dressed as fairies, and are playing in the leaves outdoors.",Two girls play dress up indoors.,0,0.5646243,0.4353757
+People jump over a mountain crevasse on a rope.,People are jumping outside.,1,0.4316506,0.5683494
+People jump over a mountain crevasse on a rope.,People slide over a mountain crevasse on a slide.,0,0.65838426,0.34161577
+A snowboarder on a wide plain of snow,A snow field with a snowboarder on it,0,0.6295936,0.3704064
+An older women tending to a garden.,The lady is cooking dinner,1,0.3392958,0.6607042
+An older women tending to a garden.,The lady has a garden,0,0.50119793,0.49880204
+A man in a black shirt overlooking bike maintenance.,A man destroys a bike.,0,0.5766744,0.42332557
+A man in a black shirt overlooking bike maintenance.,A man watches bike repairs.,0,0.51695466,0.48304537
+A man in a black shirt is looking at a bike in a workshop.,A man is wearing a red shirt,0,0.5835564,0.4164436
+A man in a black shirt is looking at a bike in a workshop.,A man is in a black shirt,0,0.6445172,0.35548282
+A man looking over a bicycle's rear wheel in the maintenance garage with various tools visible in the background.,A person is in a garage.,0,0.55880183,0.44119817
+A man looking over a bicycle's rear wheel in the maintenance garage with various tools visible in the background.,A man repairs bicycles.,0,0.62295264,0.3770474
+A man looking over a bicycle's rear wheel in the maintenance garage with various tools visible in the background.,A man waits outside a garage.,1,0.43096823,0.5690318
+"Three people sit on a bench at a station, the man looks oddly at the two women, the redheaded women looks up and forward in an awkward position, and the yellow blond girl twiddles with her hair.",Some people stand around.,1,0.30974963,0.6902504
+"Three people sit on a bench at a station, the man looks oddly at the two women, the redheaded women looks up and forward in an awkward position, and the yellow blond girl twiddles with her hair.",People run together.,1,0.27753332,0.72246665
+"Three people sit on a bench at a station, the man looks oddly at the two women, the redheaded women looks up and forward in an awkward position, and the yellow blond girl twiddles with her hair.",People wait at a station.,0,0.52677786,0.47322208
+A child wearing a red top is standing behind a blond headed child sitting in a wheelbarrow.,A child wearing a red top is standing behind a blond headed child,0,0.69789416,0.30210587
+A child wearing a red top is standing behind a blond headed child sitting in a wheelbarrow.,A child wearing a red top is standing on top of a blond headed child,0,0.69605166,0.3039483
+"A person dressed in a dress with flowers and a stuffed bee attached to it, is pushing a baby stroller down the street.",A lady sitting on a bench in the park.,1,0.27466798,0.72533196
+"A person dressed in a dress with flowers and a stuffed bee attached to it, is pushing a baby stroller down the street.",A person outside pushing a stroller.,0,0.64628994,0.35371006
+A dog jumping for a Frisbee in the snow.,A cat washes his face and whiskers with his front paw.,1,0.2963462,0.7036539
+A dog jumping for a Frisbee in the snow.,"An animal is outside in the cold weather, playing with a plastic toy.",1,0.33560786,0.6643922
+People are conversing at a dining table under a canopy.,People are talking underneath a covering.,1,0.27461463,0.72538537
+People are conversing at a dining table under a canopy.,People are screaming at a boxing match.,1,0.22280109,0.7771989
+A girl playing a violin along with a group of people,A girl is washing a load of laundry.,1,0.27376243,0.72623754
+A girl playing a violin along with a group of people,A girl is playing an instrument.,0,0.6238409,0.37615904
+A woman within an orchestra is playing a violin.,A woman is playing the violin.,0,0.64799726,0.35200277
+A woman within an orchestra is playing a violin.,A man is looking in a telescope.,1,0.28344643,0.71655357
+"Three men, one holding pipes, another holding a large object above his head, and one resting against the pipe bed on the truck, are looking at the camera.",three men look at the camera,0,0.643626,0.35637403
+"Three men, one holding pipes, another holding a large object above his head, and one resting against the pipe bed on the truck, are looking at the camera.",three men sleeping in a tent,1,0.30652115,0.6934789
+A Ford car is making a right turn as 3 males are walking across the street behind the car.,A car making a right turn had three pedestrians cross behind it.,1,0.38112405,0.6188759
+Three boys in white shirts are walking behind an older model Ford car.,there are three boys,1,0.4093169,0.5906831
+Three boys in white shirts are walking behind an older model Ford car.,There are three girls,1,0.36409837,0.63590163
+Three boys in white shirts are walking behind an older model Ford car.,The boys are on the street,1,0.30001342,0.69998664
+Three girls blow out the candles of a cake made of Peeps.,Some people are blowing out candles,1,0.4704485,0.52955157
+Three girls blow out the candles of a cake made of Peeps.,There are three girls and a cake,0,0.6423267,0.3576733
+Three girls blow out the candles of a cake made of Peeps.,There are peeps in the garden.,1,0.30089587,0.6991041
+A crowd of people looking up at 3 people on the edge of the roof of a building.,The crowd on the ground is watching 3 people on the roof's edge.,0,0.62661874,0.37338123
+A crowd of people looking up at 3 people on the edge of the roof of a building.,Three people are climbing down the ladder on the building.,1,0.31687686,0.6831231
+A woman working long hours.,A woman is working.,0,0.61488426,0.38511574
+A woman working long hours.,A woman is sleeping.,1,0.36496425,0.63503575
+Two teenage girls conversing next to lockers.,Girls talking next to the toilet.,1,0.3015475,0.6984525
+Two teenage girls conversing next to lockers.,People talking next to lockers.,0,0.567222,0.4327779
+An old woman watches a man look down at some balls on the ground.,Two people are sleeping on the train.,1,0.25667593,0.7433241
+"Two children, both wearing tan coats, are embracing one another.",Two kids are hugging.,1,0.44109443,0.55890566
+"Two children, both wearing tan coats, are embracing one another.",Two kids are running down a highway.,1,0.2717472,0.7282528
+2 kids who look related are hanging out with 1 of them looking very emotional and hugging the other.,Two kids were hugging.,1,0.46852022,0.5314798
+2 kids who look related are hanging out with 1 of them looking very emotional and hugging the other.,Two youths were pushing each other.,1,0.21589175,0.7841082
+A large number of people wearing only white and red are walking on a street.,A large number of people wearing black walking down the street.,0,0.61813897,0.3818611
+A large number of people wearing only white and red are walking on a street.,A large number of people walking on a street.,0,0.59897137,0.4010286
+A guy riding a motorcycle near junk cars,A man is riding a motorcycle.,0,0.64244366,0.3575563
+A guy riding a motorcycle near junk cars,A man is sitting on a parked motorcycle waiting for his friend.,1,0.31377605,0.6862239
+"Women of India performing with blue streamers, in beautiful blue costumes.",indian women perform together in gorgeous costumes,0,0.63607454,0.36392546
+"Women of India performing with blue streamers, in beautiful blue costumes.",dogs sniff the air,1,0.27859536,0.7214047
+A professional swimmer spits water out after surfacing while grabbing the hand of someone helping him back to land.,A person is swimming.,0,0.5013385,0.49866155
+A professional swimmer spits water out after surfacing while grabbing the hand of someone helping him back to land.,The swimmer is eating a toasted marshmallow.,1,0.23169078,0.7683092
+The man in the black wetsuit is walking out of the water.,a person is walking out of water.,0,0.6326065,0.36739352
+The man in the black wetsuit is walking out of the water.,A man is laying on the beach.,1,0.44439915,0.5556009
+Five girls and two guys are crossing a overpass.,The three men sit and talk about their lives.,1,0.2440667,0.75593334
+Five girls and two guys are crossing a overpass.,There are people outside.,1,0.24227534,0.75772464
